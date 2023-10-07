@@ -1,0 +1,2 @@
+select PRODUCT_ID, PRODUCT_NAME, PRODUCT_CD, CATEGORY, PRICE from FOOD_PRODUCT
+where PRICE = (select max(price) from FOOD_PRODUCT)
