@@ -10,7 +10,7 @@ char* solution(int n) {
         if(i%2==0) strcat(answer,"수");
         else strcat(answer,"박");
     }
-    
+    answer[3*n] = '\0';
     return answer;
 
 }
