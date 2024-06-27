@@ -1,0 +1,104 @@
+package BruteForce;
+
+import java.io.*;
+import java.util.*;
+
+public class Practice15686 {
+	
+	static int n; //크기
+	static int m; //치킨집 개수 최대
+	
+	static int[][] graph;
+	static boolean[] visited;
+	
+	static ArrayList<Node> chicken = new ArrayList();
+	static ArrayList<Node> house = new ArrayList();
+	static Stack<int[]> temp = new Stack();
+	static int answer = Integer.MAX_VALUE;
+	
+	static class Node{
+		
+		int x;
+		int y;
+		
+		public Node(int x, int y) {
+			
+			this.x = x;
+			this.y = y;
+		}
+	}
+
+	public static void main(String[] args) throws IOException{
+		// TODO Auto-generated method stub
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		String[] nm = br.readLine().split(" ");
+		
+		n = Integer.valueOf(nm[0]);
+		m = Integer.valueOf(nm[1]);
+		
+		graph = new int[n][n];
+		
+		for(int i = 0; i<n; i++) {
+			
+			String[] g = br.readLine().split(" ");
+			
+			for(int j = 0; j<n; j++) {
+				
+				graph[i][j] = Integer.valueOf(g[j]);
+				
+				if(graph[i][j] == 1) {
+					house.add(new Node(i,j));
+				}else if(graph[i][j] == 2) {
+					chicken.add(new Node(i,j));
+				}
+			}
+		}
+		visited = new boolean[chicken.size()];
+		
+		backtracking(0, 0);
+		
+//		for(Node n : chicken) {
+//			System.out.println("x : " + n.x + " / y : " + n.y);
+//		}
+		
+		System.out.println(answer);
+	}
+	
+	static void backtracking(int depth, int start) {
+		if(depth == m) {
+			
+			int sum = 0;
+			
+			for(Node h : house) {	
+//				System.out.println("X : " + h.x + " / Y :" + h.y);
+				
+				int min = Integer.MAX_VALUE;	
+				for(int[] xy : temp) {
+					min = Math.min(min, Math.abs(xy[0] - h.x) + Math.abs(xy[1] - h.y));
+//					System.out.println("tempX : " + xy[0] + " / tempY :" + xy[1] + "/ min : " + min);
+				}
+				sum += min;
+//				System.out.println("더해지는 값 : " + min);
+			}
+			answer = Math.min(answer, sum);
+//			System.out.println("answer : " + answer + " sum : " + sum);
+			return;
+		}
+		
+		//M개의 치킨집만 선택하는 경우의 수 다 돌기
+		for(int i = start; i<chicken.size(); i++) {
+			
+			if(visited[i] == false) {
+				
+				temp.add(new int[] {chicken.get(i).x, chicken.get(i).y});
+				visited[i] = true;
+				backtracking(depth + 1, i+1);
+				visited[i] = false;
+				temp.pop();
+			}
+		}
+		
+	}
+
+}
