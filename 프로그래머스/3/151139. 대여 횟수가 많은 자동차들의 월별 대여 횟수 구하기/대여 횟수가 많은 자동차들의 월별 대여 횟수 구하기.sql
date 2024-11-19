@@ -45,15 +45,31 @@
 # order by MONTH, CAR_ID DESC;
 
 
-select MONTH(START_DATE) MONTH, car_id, COUNT(*) RECORDS FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY WHERE CAR_ID IN
-(SELECT CAR_ID FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
-    WHERE DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
-    GROUP BY CAR_ID
-    HAVING(COUNT(*)) >= 5
+# select MONTH(START_DATE) MONTH, car_id, COUNT(*) RECORDS FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY WHERE CAR_ID IN
+# (SELECT CAR_ID FROM CAR_RENTAL_COMPANY_RENTAL_HISTORY
+#     WHERE DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
+#     GROUP BY CAR_ID
+#     HAVING(COUNT(*)) >= 5
+# )
+# AND DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
+# GROUP BY MONTH, CAR_ID
+# ORDER BY MONTH, CAR_ID DESC
+
+
+select date_format(start_date, '%m') month, car_id, count(*)
+from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+where car_id in(
+    select car_id from CAR_RENTAL_COMPANY_RENTAL_HISTORY
+    where date_format(start_date, '%Y-%m') between '2022-08' and '2022-10'
+    group by car_id
+    having count(*) >= 5
 )
-AND DATE_FORMAT(START_DATE, '%Y-%m') BETWEEN '2022-08' AND '2022-10'
-GROUP BY MONTH, CAR_ID
-ORDER BY MONTH, CAR_ID DESC
+and date_format(start_date, '%m') between '08' and '10'
+group by month, car_id
+order by month, car_id desc
+
+
+
 
 
 
